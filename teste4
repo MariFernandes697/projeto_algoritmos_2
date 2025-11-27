@@ -1,0 +1,336 @@
+#include <iostream>
+#include <string>
+#include <random>//vou usar para gerar o código do animal
+using namespace std;
+
+#define VAGAS 50
+
+int contID = 0, contA = 0; //para contar a quantidade de animais e tutores e poder utilizar seus valores como parametros em várias funções
+//int contID, além de usar para contar a quantidade de tutores, também já irá servir como o seu id
+struct Tutor{
+    int id;
+    string nome, endereco;
+};
+struct Animal{
+    int codigo, idade, idTutor;
+    string nome, especie;
+};
+
+struct FichaMedica{
+    int idFicha;
+    string alergiaExistente, doenca;
+};
+
+string MsnError(){
+    return "Nao ha dados cadastrados\nTente Novamente\n\n";
+}
+
+void Menu() {
+    cout << "----MENU----\n";
+    cout << "1. Para Cadastrar Tutor\n";
+    cout << "2. Para Cadastrar Animal\n";
+    cout << "3. Para Listar Tutores\n";
+    cout << "4. Para Listar Animais\n";
+    cout << "5. Para Buscar Animais por ID\n";
+    cout << "6. Ver histórico médico do animal por ID";
+    cout << "7. Para Gerar Relatorio\n";
+    cout << "0. Para sair\n";
+    cout << endl;
+}
+
+void AdicionarTutor(Tutor vetTutor[]){
+    if(contID >= VAGAS){
+        cout << "Cadastro nao realizado\n";
+        return;
+    }
+    contID++;
+    vetTutor[contID].id = contID;
+
+}
+
+void CadastrarTutor(Tutor vetTutor[]){
+    //para facilitar vou passar apenas o vetor como parametro como parametro
+    //Não utilizarei uma variável, apenas o próprio indice do vetor
+    cout << "-----Cadastro para Tutor-----\n";
+    cout << "Nome: " ;
+    cin.ignore();
+	getline(cin, vetTutor[contID].nome);
+	cout << "\nEndereco: ";
+	getline(cin, vetTutor[contID].endereco);
+
+    cout << "Cadastro realizado com sucesso! Seu Id e: "<< vetTutor[contID].id << endl << endl;
+}
+
+void CadastrarHistoricoMedico(FichaMedica vetFicha[], Animal vetAnimal[]){
+    cout << "-----Historico Medico-----\n";
+    int idFicha;
+    idFicha = vetAnimal[contA].codigo;
+    string alergia;
+    cout << "Esse animal possui alguma alergia? (sim ou nao). Se sim, qual?";
+    cin >> alergia;
+    if(alergia == "sim"){
+        cout << "Digite a alergia: ";
+        cin >> vetFicha[contA].alergiaExistente;
+    }
+    else if (alergia == "nao"){
+        vetFicha[contA].alergiaExistente = "não possui alergias";
+    }
+    else{
+        cout << MsnError();
+    }
+    string doenca;
+    cout << "E doencas? (sim ou nao). Se sim, qual?";
+    cin >> doenca;
+    if(doenca == "sim"){
+        cout << "Digite a doenca: ";
+        cin >> vetFicha[contA].doenca;
+    }
+    else if (doenca == "nao"){
+        vetFicha[contA].doenca = "não possui";
+    }
+    else{
+        cout << MsnError();
+    }
+}
+void MostrarHistorico(FichaMedica vetFicha[], Animal vetAnimal[]){
+     cout << "----Histórico Médico----\n";
+    if (contA == 0){
+        cout << MsnError();
+        return;
+    }
+
+    cout << "Digite o código do animal\n";
+    int codigoA;
+    cin >> codigoA;
+
+
+    bool idEncontrado = false;
+
+    for(int i = 1; i <= contA; i++){
+
+        if(vetAnimal[i].codigo == codigoA ){
+            idEncontrado = true;
+            cout << "Alergias:" << vetFicha[i].alergiaExistente << endl;
+            cout << "Doenca:" << vetFicha[i].doenca << endl;
+            cout << endl;
+        }
+    }
+    cout << endl;
+    if(idEncontrado == false){
+        cout << MsnError();
+    }
+}
+
+void CadastrarAnimal(Animal vetAnimal[], Tutor vetTutor[]){
+    int idInfo;//id do tutor que será passado para o animal
+    bool idteste;// variável que vai dizer se o id que foi informado realmente existe no vetor de tutores
+
+    //verifica se há algum tutor cadastrado para possibilitar o cadastro do animal
+    if(contID == 0){
+        cout << "Nenhum tutor cadastrado ainda. Volte uma etapa!\n";
+        return;
+    }
+    if(contA >= VAGAS){
+        cout << "Cadastro nao realizado\n";
+        return;
+    }
+    contA++;
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distrib(10000, 50000);
+    //atribuindo um código gerado para o animal
+    vetAnimal[contA].codigo  = distrib(gen);
+
+    cout << "-----Cadastro para Animal-----\n";
+    cout << "Nome: " ;
+    cin.ignore();
+	getline(cin, vetAnimal[contA].nome);
+	cout << "\nEspecie: ";
+	getline(cin, vetAnimal[contA].especie);
+	cout << "\nIdade: ";
+	cin >> vetAnimal[contA].idade;
+
+	//Chamando a função cadastrarHistoricoMedico
+	//CadastrarHistoricoMedico();
+
+
+    do{
+    cout << "\nDigite seu ID: \n";
+	cin >> idInfo;
+    idteste = false;
+    for(int i = 1; i <= contID; i++){
+        if(vetTutor[i].id == idInfo ){
+            idteste = true;
+
+            break;
+        }
+    }
+    if(idteste == false){
+    cout << "id inválido\nTente novamente\n";}
+
+    }while (idteste == false);// irá repetir o loop até que  id digitado pelo usuario realmete exista
+
+    vetAnimal[contA].idTutor = idInfo;
+
+
+
+    cout << "Animal cadastrado com sucesso! Seu codigo e: " << vetAnimal[contA].codigo << endl << endl;
+
+
+}
+
+void ListarT(Tutor vetTutor[]){
+    cout << "----Tutores----\n";
+    if(contID == 0){
+        cout << MsnError();
+        return;
+    }
+    for(int i = 1; i <= contID; i++){
+        cout << "ID: " << vetTutor[i].id << endl;
+        cout << "Nome: " << vetTutor[i].nome << endl;
+        cout << "Endereco: " << vetTutor[i].endereco << endl;
+        cout << endl;
+    }
+    cout << endl;
+
+}
+//funçâo para buscar o nome do tutor
+//Tem que ser declarada antes da função listar animais, pois a invocaremos nela
+string BuscaTNome(Tutor vetTutor[], int idTutor){
+    for(int i = 1; i <= contID; i++){
+        if(vetTutor[i].id == idTutor){
+            //se o id informado existe, retorna o nome que a sua 'chave' guarda
+            return vetTutor[i].nome;
+        }
+    }
+    return "Tutor não encontrado";
+}
+
+void ListarA(Animal vetAnimal[], Tutor vetTutor[]){
+    cout << "----Animais----\n";
+
+    //verifica pelo contador se existe algum animal cadastrado antes de seguir o procedimento
+    if(contA == 0 ){
+        cout << MsnError();
+        return;
+    }
+
+
+    for (int i = 1; i <= contA; i++){
+        //guardando o id do tutor do animal em uma variavel dentro desse loop para buscar o seu nome.
+        int idT = vetAnimal[i].idTutor;
+
+        //chamando a função para buscar nome e guardando o nome em uma variavel local
+        string nomeT = BuscaTNome(vetTutor, idT);
+        cout << "Animal: " << vetAnimal[i].nome << " | Especie: " << vetAnimal[i].especie << " | Idade: "  << vetAnimal[i].idade << endl;
+        cout << "Tutor: " << nomeT << endl;
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void BuscarAnimais(Animal vetAnimal[], Tutor vetTutor[]){
+    cout << "Busca de Animais\n";
+    if (contA == 0){
+        cout << MsnError();
+        return;
+    }
+
+    cout << "Digite o ID do tutor\n";
+    int idTutor;
+    cin >> idTutor;
+
+
+    bool idEncontrado = false;
+
+    for(int i = 1; i <= contA; i++){
+ //verificando se existe o id do tutor, mas direto pela lista de animais
+        if(vetAnimal[i].idTutor == idTutor ){
+            idEncontrado = true;
+            cout << "Codigo:" << vetAnimal[i].codigo << endl;
+            cout << "Nome:" << vetAnimal[i].nome << endl;
+            cout << "Codigo:" << vetAnimal[i].codigo << endl;
+            cout << "Especie:" << vetAnimal[i].especie << endl;
+            cout << "Idade:" << vetAnimal[i].idade << endl;
+            cout << endl;
+        }
+    }
+    cout << endl;
+    if(idEncontrado == false){
+        cout << MsnError();
+    }
+}
+
+
+void Relatorio(Tutor vetTutor[], Animal vetAnimal[]){
+    if(contID == 0){
+        cout << MsnError();
+        return;
+    }
+    if(contA == 0){
+        cout << MsnError();
+        return;
+    }
+    cout << "----Relatorio----\n";
+
+    for (int i = 1; i <= contID ; i++){
+        //preciso percorrer os tutores, mostrá-los e todos os animais que pertencem a ele
+        //variavel para armazenar temporariamente a quantidade de animais do tutor em questão
+        int totalA = 0, idT = vetTutor[i].id;
+        for (int a = 1; a <= contA; a++){
+            if(vetAnimal[a].idTutor == idT){
+                totalA++;
+            }
+        }
+        cout << "Tutor: " << vetTutor[i].nome << endl;
+        cout << "Possui " << totalA << " animal/animais\n";
+        cout << endl;
+
+    }
+}
+
+int main(){
+   Tutor vetTutor[VAGAS];
+    Animal vetAnimal[VAGAS];
+    FichaMedica vetFicha[VAGAS];
+
+    int opcao;
+
+    do {
+
+        Menu();
+        cin >> opcao;
+
+        switch (opcao) {
+            case 1:
+                AdicionarTutor(vetTutor);
+                CadastrarTutor(vetTutor);
+                break;
+            case 2:
+                CadastrarAnimal(vetAnimal, vetTutor);
+                break;
+            case 3:
+                ListarT(vetTutor);
+                break;
+            case 4:
+                ListarA(vetAnimal, vetTutor);
+                break;
+            case 5:
+                BuscarAnimais(vetAnimal, vetTutor);
+                break;
+            case 6:
+                MostrarHistorico(vetFicha, vetAnimal);
+            case 7:
+                Relatorio(vetTutor,vetAnimal);
+                break;
+            case 0:
+                cout << "Saindo do sistema....\n";
+                break;
+            default:
+                cout << "Opcao invalida. Tente novamente.\n";
+                break;
+        }
+    } while (opcao != 0);
+
+    return 0;
+}
