@@ -93,7 +93,7 @@ void CadastrarHistoricoMedico(FichaMedica vetFicha[], Animal vetAnimal[]) {
     else if(opcao == "nao"){
         strcpy(vetFicha[contA].doenca, "Nao possui");
     }
-    cout << "Dados cadastrados com sucesso!\n";
+    cout << "Dados cadastrados com sucesso!\n\n";
 }
 
 void MostrarHistorico(FichaMedica vetFicha[], Animal vetAnimal[]) {
@@ -112,7 +112,7 @@ void MostrarHistorico(FichaMedica vetFicha[], Animal vetAnimal[]) {
     for (int i = 1; i <= contA; i++) {
         if (vetAnimal[i].codigo == codigoA) {
             idEncontrado = true;
-            cout << "\n--- FICHA M�DICA ---\n";
+            cout << "\n\n--- FICHA MEDICA ---\n";
             cout << "Animal: " << vetAnimal[i].nome;
             cout << "Alergias: " << vetFicha[i].alergiaExistente << endl;
             cout << "Doenca: " << vetFicha[i].doenca << endl;
@@ -271,7 +271,7 @@ void SalvarInformacoes(Tutor vetTutor[], Animal vetAnimal[], FichaMedica vetFich
 
     if (clinica.is_open()) {
 
-        //Eu pesquisei o caso e vari�veis se passam por refer�ncia
+        //Eu pesquisei o caso e variaveis se passam por referencia
         clinica.write((char*)&contA, sizeof(int));
         clinica.write((char*)&contID, sizeof(int));
         //Vetores se passam normalmente
@@ -280,7 +280,7 @@ void SalvarInformacoes(Tutor vetTutor[], Animal vetAnimal[], FichaMedica vetFich
         clinica.write((char*)vetFicha, sizeof(FichaMedica) * VAGAS);
 
         clinica.close();
-        cout << "Informacoes salvas com sucesso!!\n";
+        cout << "Informacoes salvas com sucesso!!\n\n";
     }
     else {
         cout << "Falha ao gravar informacoes.\n";
