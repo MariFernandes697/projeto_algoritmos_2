@@ -68,7 +68,7 @@ void CadastrarHistoricoMedico(FichaMedica vetFicha[], Animal vetAnimal[]) {
     // Vincula a ficha ao animal
     vetFicha[contA].idFicha = vetAnimal[contA].codigo;
 
-    string opcao; // String auxiliar para facilitar o IF
+    string opcao;
 
     cout << "Esse animal possui alguma alergia? (sim ou nao): ";
     cin >> opcao;
@@ -78,7 +78,7 @@ void CadastrarHistoricoMedico(FichaMedica vetFicha[], Animal vetAnimal[]) {
         cin.ignore();
         cin.getline(vetFicha[contA].alergiaExistente, VAGAS);
     }
-    else if(opcao == nao){
+    else if(opcao == "nao"){
         strcpy(vetFicha[contA].alergiaExistente, "Nao possui alergias");
     }
 
@@ -90,7 +90,7 @@ void CadastrarHistoricoMedico(FichaMedica vetFicha[], Animal vetAnimal[]) {
         cin.ignore();
         cin.getline(vetFicha[contA].doenca, VAGAS);
     }
-    else if(opcao == nao){
+    else if(opcao == "nao"){
         strcpy(vetFicha[contA].doenca, "Nao possui");
     }
     cout << "Dados cadastrados com sucesso!\n";
@@ -112,7 +112,7 @@ void MostrarHistorico(FichaMedica vetFicha[], Animal vetAnimal[]) {
     for (int i = 1; i <= contA; i++) {
         if (vetAnimal[i].codigo == codigoA) {
             idEncontrado = true;
-            cout << "\n--- FICHA MÉDICA ---\n";
+            cout << "\n--- FICHA Mï¿½DICA ---\n";
             cout << "Animal: " << vetAnimal[i].nome;
             cout << "Alergias: " << vetFicha[i].alergiaExistente << endl;
             cout << "Doenca: " << vetFicha[i].doenca << endl;
@@ -271,7 +271,7 @@ void SalvarInformacoes(Tutor vetTutor[], Animal vetAnimal[], FichaMedica vetFich
 
     if (clinica.is_open()) {
 
-        //Eu pesquisei o caso e variáveis se passam por referência
+        //Eu pesquisei o caso e variï¿½veis se passam por referï¿½ncia
         clinica.write((char*)&contA, sizeof(int));
         clinica.write((char*)&contID, sizeof(int));
         //Vetores se passam normalmente
