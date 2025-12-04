@@ -34,7 +34,7 @@ void Menu() {
     cout << "3. Para Listar Tutores\n";
     cout << "4. Para Listar Animais\n";
     cout << "5. Para Buscar Animais por ID\n";
-    cout << "6. Ver historico medico do animal por ID\n";
+    cout << "6. Para Ver historico medico do animal por ID\n";
     cout << "7. Para Gerar Relatorio\n";
     cout << "8. Para Salvar Informacoes\n";
     cout << "9. Para Carregar Informacoes\n";
